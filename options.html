@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>WhatsApp Launcher Options</title>
+<style>
+th, td {
+    padding: 5px;
+}
+</style>
+</head>
+<body bgcolor="#ECE5DD">
+	<table align="center" bgcolor="#DCF8C6">
+		<tbody>
+			<tr>
+				<td width="370">
+				<FIELDSET ><LEGEND><b>WhatsApp Launcher Options</b></LEGEND>
+					<div align="left">
+						<table >
+						<tr><td>
+							<p>
+								Show notify by:&nbsp;
+								<select id="badge" >
+									<option value="contact">Contacts</option>
+                                    <!-- <option value="icontact">Icon number</option> -->
+									<option value="none">(None)</option>
+									<!-- <option value="total">Messages</option> -->
+								</select> &nbsp; 
+								<label>
+									<input type="checkbox" id="like">&nbsp;remember
+								</label>
+							</p>
+							<p>
+								<button id="save">Save</button>&nbsp;
+								<label>
+									<input type="checkbox" id="reload" checked>&nbsp;Closed and reload.
+								</label> &nbsp;&nbsp;
+								<a id="status"></a>
+							</p>						
+							<p id="detail" style="color: #CC5200"></p>
+							<br>						
+						</td></tr>
+						</table>
+					</div>
+					</FIELDSET>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<script src="options.js"></script>
+</body>
+</html>
