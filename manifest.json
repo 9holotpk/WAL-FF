@@ -13,7 +13,7 @@
   "applications": {
     "gecko": {
       "id": "WhatsAppLaunch@9holotpk",
-      "strict_min_version": "45.0"
+      "strict_min_version": "51.0"
     }
   },
   
@@ -33,7 +33,7 @@
       "background.js"
     ]
   }, 
-  "name": "WhatsApp Launcher", 
+  "name": "WhatsApp Launch", 
   "options_ui": {
     "chrome_style": true, 
     "page": "options.html", 
