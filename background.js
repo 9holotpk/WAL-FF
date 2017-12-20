@@ -10,11 +10,12 @@ function checkQR (what){
 	chrome.tabs.query({ url: whatsAppURL + "*" }, function(tabs){
 		chrome.tabs.sendMessage(tabs[0].id, {line: 'countparas'});
 	});
+	// console.log('CHK: QR');
 	var nicon = '';
 	chrome.runtime.onMessage.addListener(
 		function (request, sender) {
 			if(request.count){
-				//console.log('log: (' +request.count+ ') tab ID: (' +sender.tab.id+ ') Waiting Scan QR Code.');
+				// console.log('log: (' +request.count+ ') tab ID: (' +sender.tab.id+ ') Waiting Scan QR Code.');
 				chrome.browserAction.setBadgeText({ text: "QR" });
 				chrome.browserAction.setTitle({ title: 'Please Scan QR Code' })
 				chrome.browserAction.setBadgeBackgroundColor({ color: "#000000" });
@@ -25,35 +26,22 @@ function checkQR (what){
 				chrome.browserAction.setTitle({ title: 'Something Alert!'})
 				chrome.browserAction.setBadgeBackgroundColor({ color: "#FED859" });
 			}
-                        if(request.icon){
-                            //console.log('log: (' +request.icon+ ')');
-                            nicon = request.icon;
-                            if(what=="ckicon"){
-                                chrome.browserAction.setIcon({
-                                    path : nicon
-                                });
-                            }else {
-                                chrome.browserAction.setIcon({
-                                    path : "icons/whatsapp_48.png"
-                                });
-                            }
-                        }
 		}
 	);
         
 }
 
-chrome.browserAction.onClicked.addListener(function(){
-	chrome.tabs.query({ url: whatsAppURL + "*" }, function(tabs){
+browser.browserAction.onClicked.addListener(function(){
+	browser.tabs.query({ url: whatsAppURL + "*" }, function(tabs){
         if(tabs.length > 0){
         	var winID = tabs[0].windowId;
-    		chrome.windows.update(winID, { focused: true });   		
+    		browser.windows.update(winID, { focused: true });   		
             //chrome.tabs.update(tabs[0].id, { active: true });
             tabID = tabs[0].id;
             checkQR();
         }else{
-        	chrome.windows.create({url: whatsAppURL, type: "popup", width: 685, height: 620, top: 50, left: 50});
-        	//console.log('log: Created new Window chat!');
+        	browser.windows.create({url: whatsAppURL, type: "popup", width: 685, height: 620, top: 50, left: 50});
+        	// console.log('log: Created new Window chat!');
         }
     });	
 });
@@ -72,7 +60,7 @@ chrome.tabs.onUpdated.addListener(function(tabsU, changeInfo, tab){
 					}
 				});				
 				readTitle = tabs[0].title;
-				//console.log('Title='+readTitle);
+				// console.log('Title='+readTitle);
 				if(readTitle.length > 0 && status == 'contact'){
                                     var f = readTitle.indexOf("(");
 				    var e = readTitle.indexOf(")");

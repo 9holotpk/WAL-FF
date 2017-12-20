@@ -2,7 +2,8 @@
 browser.runtime.onMessage.addListener(
 	function(request, sender){
 		if(request.line=='countparas'){
-			var paras = document.body.querySelectorAll('div.qrcode');
+			var paras = 0;
+			// var paras = document.body.querySelectorAll('img').values = 'Scan me!';
 			var alert = document.body.querySelectorAll('div.butterbar');
                         var icon = document.getElementById('favicon').href;
 			if(paras.length > 0){ 
@@ -12,7 +13,7 @@ browser.runtime.onMessage.addListener(
 				var theCount = paras.length+'';
 				chrome.runtime.sendMessage({alert:theCount});
 			}else{
-				//console.log('log: There does not seem to be any <div> elements in this page!');
+				console.log('log: There does not seem to be any <div> elements in this page!');
 			}
                         
                         if(icon.length > 0){
