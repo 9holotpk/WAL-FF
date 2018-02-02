@@ -4,138 +4,104 @@ var readTitle;
 var tabID;
 var res = "";
 var status = ''; // 'contact' default
-chrome.browserAction.setBadgeText({ text: "" });
+browser.browserAction.setBadgeText({ text: "" });
 
 function checkQR (what){
-	chrome.tabs.query({ url: whatsAppURL + "*" }, function(tabs){
-		chrome.tabs.sendMessage(tabs[0].id, {line: 'countparas'});
+	browser.tabs.query({ url: whatsAppURL + "*" }, function(tabs){
+		browser.tabs.sendMessage(tabs[0].id, {line: 'countparas'});
+		console.log('sendMessage * ' + tabs[0].id);
 	});
-	// console.log('CHK: QR');
-	var nicon = '';
-	chrome.runtime.onMessage.addListener(
+	console.log('CHK: QR = ' + what);
+	checkBadge();
+	browser.runtime.onMessage.addListener(
 		function (request, sender) {
-			if(request.count){
+			console.log('runtime', request.count);
+			if(request.count == 'Scan me!'){
 				// console.log('log: (' +request.count+ ') tab ID: (' +sender.tab.id+ ') Waiting Scan QR Code.');
-				chrome.browserAction.setBadgeText({ text: "QR" });
-				chrome.browserAction.setTitle({ title: 'Please Scan QR Code' })
-				chrome.browserAction.setBadgeBackgroundColor({ color: "#000000" });
-			}
-			if(request.alert){
-				//console.log('log: (' +request.alert+ ') tab ID: (' +sender.tab.id+ ') Something Alert!');
-				chrome.browserAction.setBadgeText({ text: "!" });
-				chrome.browserAction.setTitle({ title: 'Something Alert!'})
-				chrome.browserAction.setBadgeBackgroundColor({ color: "#FED859" });
+				setBadgeQR();
+			} else {
+				setBadgeQR();
 			}
 		}
 	);
-        
+}
+
+function checkBadge() {
+	browser.tabs.query({ url: whatsAppURL + "*", status: 'complete' }, function(tabs){
+		if(tabs.length > 0){
+			tabID = tabs[0].id;
+			// # Load options saved.
+			browser.storage.local.get("favoriteBadge", function(items) {
+				if (!browser.runtime.lastError) {
+					status = items.favoriteBadge;
+				}
+			});
+			// # Read Title.				
+			readTitle = tabs[0].title;
+			// # Check status by options.
+			if (status == 'none') {
+				browser.browserAction.setBadgeText({ text: "" });
+				browser.browserAction.setTitle({title: 'WhatsApp Launcher'})
+			} else {
+				var f = readTitle.indexOf("(");
+				var e = readTitle.indexOf(")");
+				res = readTitle.substring(f+1, e);
+				if(res.length > 0){
+					browser.browserAction.setTitle({title: 'Chat from ' +res+ ' contact(s) | Click to Launch'})
+					browser.browserAction.setBadgeText({ text: res });
+					browser.browserAction.setBadgeBackgroundColor({ color: "#ff0000" });
+				}else{
+					browser.browserAction.setTitle({title: 'WhatsApp Launcher'})
+					browser.browserAction.setBadgeText({ text: "on" });
+					browser.browserAction.setBadgeBackgroundColor({ color: "#000000" });
+				}
+			}
+		}
+	});
+}
+
+function setBadgeQR() {
+	browser.browserAction.setBadgeText({ text: "QR" });
+	browser.browserAction.setTitle({ title: 'Please Scan QR Code' })
+	browser.browserAction.setBadgeBackgroundColor({ color: "#000000" });
+}
+
+function setBadgeOn() {
+	browser.browserAction.setTitle({title: 'WhatsApp Launcher'})
+	browser.browserAction.setBadgeText({ text: "on" });
+	browser.browserAction.setBadgeBackgroundColor({ color: "#000000" });
 }
 
 browser.browserAction.onClicked.addListener(function(){
+	// # Check WhatsApp tab.
 	browser.tabs.query({ url: whatsAppURL + "*" }, function(tabs){
         if(tabs.length > 0){
         	var winID = tabs[0].windowId;
     		browser.windows.update(winID, { focused: true });   		
-            //chrome.tabs.update(tabs[0].id, { active: true });
             tabID = tabs[0].id;
-            checkQR();
+            checkQR('by Click');
         }else{
+			// # Create new window chat.
         	browser.windows.create({url: whatsAppURL, type: "popup", width: 685, height: 620, top: 50, left: 50});
-        	// console.log('log: Created new Window chat!');
+			checkQR('by Click');
         }
     });	
 });
 
-chrome.tabs.onUpdated.addListener(function(tabsU, changeInfo, tab){
-	chrome.tabs.query({ url: whatsAppURL + "*" }, function(tabs){
-		if(tabs.length > 0){
-			tabID = tabs[0].id;
-			//console.log('TabID='+tabID);
-			if(tabsU==tabID){
-				//Options
-				chrome.storage.local.get("favoriteBadge", function(items) {
-					if (!browser.runtime.lastError) {
-						status = items.favoriteBadge;
-						//console.log('Status='+status);
-					}
-				});				
-				readTitle = tabs[0].title;
-				// console.log('Title='+readTitle);
-				if(readTitle.length > 0 && status == 'contact'){
-                                    var f = readTitle.indexOf("(");
-				    var e = readTitle.indexOf(")");
-				    res = readTitle.substring(f+1, e);
-				    if(res.length > 0){
-				    	chrome.browserAction.setTitle({title: 'Chat from ' +res+ ' contact(s) | Click to Launch'})
-					    chrome.browserAction.setBadgeText({ text: res });
-					    chrome.browserAction.setBadgeBackgroundColor({ color: "#ff0000" });
-                                            
-					}else{
-                                            chrome.browserAction.setTitle({title: 'WhatsApp Launcher'})
-                                            chrome.browserAction.setBadgeText({ text: "on" });
-                                            chrome.browserAction.setBadgeBackgroundColor({ color: "#000000" });
-					}
-				    checkQR(); // Check QR & Alert
-				}else if(readTitle.length > 0 && status == 'icontact'){
-                                    var f = readTitle.indexOf("(");
-				    var e = readTitle.indexOf(")");
-				    res = readTitle.substring(f+1, e);
-				    if(res.length > 0){
-				    	chrome.browserAction.setTitle({title: 'Chat from ' +res+ ' contact(s) | Click to Launch'})
-					chrome.browserAction.setBadgeText({ text: "" });
-					chrome.browserAction.setBadgeBackgroundColor({ color: "#ff0000" });
-                                            
-                                    }else{
-                                        chrome.browserAction.setTitle({title: 'WhatsApp Launcher'})
-                                        chrome.browserAction.setBadgeText({ text: "" });
-                                        chrome.browserAction.setBadgeBackgroundColor({ color: "#000000" });
-					}
-				    checkQR("ckicon"); // Check QR & Alert
-				}else if(status == 'total'){
-					var numChat;
-					if(numChat.length > 0){
-				    	chrome.browserAction.setTitle({title: 'New ' +res+ ' message(s) | Click to Launch'})
-					    chrome.browserAction.setBadgeText({ text: numChat });
-					    chrome.browserAction.setBadgeBackgroundColor({ color: "#ff0000" });
-					}else{
-						chrome.browserAction.setTitle({title: 'WhatsApp Launcher'})
-						chrome.browserAction.setBadgeText({ text: "on" });
-				    	chrome.browserAction.setBadgeBackgroundColor({ color: "#000000" });
-					}
-					checkQR(); // Check QR & Alert
-				}else if(status == 'none'){
-					chrome.browserAction.setBadgeText({ text: "" });
-					chrome.browserAction.setTitle({title: 'WhatsApp Launcher'})
-				}else{
-					//console.log('default status');
-					//default = contact
-					var f = readTitle.indexOf("(");
-				    var e = readTitle.indexOf(")");
-				    res = readTitle.substring(f+1, e);
-				    if(res.length > 0){
-				    	chrome.browserAction.setTitle({title: 'Chat from ' +res+ ' contact(s) | Click to Launch'})
-					    chrome.browserAction.setBadgeText({ text: res });
-					    chrome.browserAction.setBadgeBackgroundColor({ color: "#ff0000" });
-					}else{
-						chrome.browserAction.setTitle({title: 'WhatsApp Launcher'})
-						chrome.browserAction.setBadgeText({ text: "on" });
-				    	chrome.browserAction.setBadgeBackgroundColor({ color: "#000000" });
-					}
-				    checkQR(); // Check QR & Alert					
-				}
-								
-			}
-        }
-	});
+browser.tabs.onActivated.addListener(function (activeInfo){
+	console.log('log: onActive');
+	if(activeInfo.tabId == tabID){
+		checkQR('by Active');
+	}
 });
 
-chrome.tabs.onRemoved.addListener(function (tabsR, removeInfo){
+browser.tabs.onUpdated.addListener(function(tabsU, changeInfo, tab){
+	checkQR('by Update');
+});
+
+browser.tabs.onRemoved.addListener(function (tabsR, removeInfo){
 	if(tabsR==tabID){
-		chrome.browserAction.setBadgeText({ text: "" });
-		chrome.browserAction.setTitle({title: 'WhatsApp Launcher'});
-                chrome.browserAction.setIcon({
-                    path : "icons/whatsapp_48.png"
-                });
-		//console.log('log: Closed Window chat!');
+		browser.browserAction.setBadgeText({ text: "" });
+		browser.browserAction.setTitle({title: 'WhatsApp Launcher'});
 	}
 });
