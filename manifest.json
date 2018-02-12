@@ -39,7 +39,7 @@
     "page": "options.html", 
     "open_in_tab": false
   }, 
-  "version": "1.2", 
+  "version": "1.2.1", 
   "options_page": "options.html", 
   "manifest_version": 2, 
   "permissions": [

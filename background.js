@@ -9,13 +9,13 @@ browser.browserAction.setBadgeText({ text: "" });
 function checkQR (what){
 	browser.tabs.query({ url: whatsAppURL + "*" }, function(tabs){
 		browser.tabs.sendMessage(tabs[0].id, {line: 'countparas'});
-		console.log('sendMessage * ' + tabs[0].id);
+		// console.log('sendMessage * ' + tabs[0].id);
 	});
-	console.log('CHK: QR = ' + what);
+	// console.log('CHK: QR = ' + what);
 	checkBadge();
 	browser.runtime.onMessage.addListener(
 		function (request, sender) {
-			console.log('runtime', request.count);
+			// console.log('runtime', request.count);
 			if(request.count == 'Scan me!'){
 				// console.log('log: (' +request.count+ ') tab ID: (' +sender.tab.id+ ') Waiting Scan QR Code.');
 				setBadgeQR();
@@ -89,7 +89,7 @@ browser.browserAction.onClicked.addListener(function(){
 });
 
 browser.tabs.onActivated.addListener(function (activeInfo){
-	console.log('log: onActive');
+	// console.log('log: onActive');
 	if(activeInfo.tabId == tabID){
 		checkQR('by Active');
 	}
