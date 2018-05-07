@@ -6,6 +6,34 @@ var res = "";
 var status = ''; // 'contact' default
 browser.browserAction.setBadgeText({ text: "" });
 
+initContextMenus();
+function initContextMenus(){
+	browser.contextMenus.create({
+		id: 'options-wal-id',
+		title: 'WhatsApp Launch Options',
+		contexts: ["browser_action"]
+	}, onCreated);
+
+	function onCreated(n) {
+		if (browser.runtime.lastError) {
+		}
+	}
+	browser.contextMenus.onClicked.addListener(listener);
+}
+
+function openPreferences(){
+	function onOpened() {
+	}
+	browser.runtime.openOptionsPage().then(onOpened, onError);	
+}
+
+function listener(info,tab){
+	if(info.menuItemId == "options-wal-id"){
+		openPreferences();
+		return;
+	}
+}
+
 function checkQR (what){
 	browser.tabs.query({ url: whatsAppURL + "*" }, function(tabs){
 		browser.tabs.sendMessage(tabs[0].id, {line: 'countparas'});
