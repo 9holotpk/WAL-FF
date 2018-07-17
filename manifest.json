@@ -3,52 +3,50 @@
     {
       "matches": [
         "*://web.whatsapp.com/*"
-      ], 
+      ],
       "js": [
         "contentscript.js"
       ]
     }
-  ], 
-  
+  ],
   "applications": {
     "gecko": {
       "id": "WhatsAppLaunch@9holotpk",
       "strict_min_version": "51.0"
     }
   },
-  
   "browser_action": {
-    "default_icon": "icons/whatsapp_128.png", 
+    "default_icon": "icons/whatsapp_128.png",
     "default_title": "WhatsApp Launch"
-  }, 
-  "description": "Fast Launcher for WhatsApp Web", 
+  },
+  "description": "Fast Launcher for WhatsApp Web",
   "icons": {
-    "128": "icons/whatsapp_128.png", 
-    "64": "icons/whatsapp_64.png", 
-    "48": "icons/whatsapp_48.png", 
+    "128": "icons/whatsapp_128.png",
+    "64": "icons/whatsapp_64.png",
+    "48": "icons/whatsapp_48.png",
     "16": "icons/whatsapp_16.png"
-  }, 
+  },
   "background": {
     "scripts": [
       "background.js"
     ]
-  }, 
-  "name": "WhatsApp Launch",  
-  "version": "1.3", 
+  },
+  "name": "WhatsApp Launcher",
+  "version": "1.3.1",
   "options_ui": {
-    "chrome_style": true, 
-    "page": "options.html", 
+    "chrome_style": true,
+    "page": "options.html",
     "open_in_tab": true
   },
-  "manifest_version": 2, 
+  "manifest_version": 2,
   "permissions": [
-    "tabs", 
-    "https://web.whatsapp.com/", 
+    "tabs",
+    "https://web.whatsapp.com/",
     "storage",
     "contextMenus"
-  ], 
+  ],
   "developer": {
-    "url": "http://twitter.com/9holotpk", 
+    "url": "http://twitter.com/9holotpk",
     "name": "Sontaya T. Wichakot"
   }
 }

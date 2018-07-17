@@ -53,15 +53,15 @@ function restore_options() {
 		//console.log('log: options='+chosenoption2);
 		var detail = document.getElementById('detail');
 		if (chosenoption2 == "none"){	   
-			detail.textContent = 'None = Badge is Off.';
+			detail.textContent = '* Badge is Off.';
 		}else if (chosenoption2 == "contact"){
-			detail.textContent = 'Contacts = Show number of contact send new chat to you.';
+			detail.textContent = '* Show number of contact send new chat to you.';
                 }else if (chosenoption2 == "icontact"){
-			detail.textContent = 'Icon number = Show number of contact send new chat to you (inside icon). *This option is beta.';
+			detail.textContent = '* Show number of contact send new chat to you (inside icon). *This option is beta.';
 		}else if (chosenoption2 == "total"){
-			detail.textContent = 'Messages = Show the total number of messages. (Next ver.)';
+			detail.textContent = '* Show the total number of messages. (Next ver.)';
 		}else {
-			detail.textContent = "*First (Empty) default is 'Contacts'.";
+			detail.textContent = "* First (Empty) default is 'Contacts'.";
 		}
   });
   
@@ -72,13 +72,13 @@ selectmenu.onchange = function(){ //run some code when "onchange" event fires
 	var chosenoption = this.options[this.selectedIndex] //this refers to "selectmenu"
 	var detail = document.getElementById('detail');	
 	if (chosenoption.value == "none"){	   
-		detail.textContent = 'None = Badge is Off.';
+		detail.textContent = '* Badge is Off.';
 	}else if (chosenoption.value == "contact"){
-		detail.textContent = 'Contacts = Show number of contact send new chat to you.';
+		detail.textContent = '* Show number of contact send new chat to you.';
         }else if (chosenoption.value == "icontact"){
-			detail.textContent = 'Icon number = Show number of contact send new chat to you (inside icon). *This option is beta.';
+			detail.textContent = '* Show number of contact send new chat to you (inside icon). *This option is beta.';
 	}else if (chosenoption.value == "total"){
-		detail.textContent = 'Messages = Show the total number of messages. (Next ver.)';
+		detail.textContent = '* Show the total number of messages. (Next ver.)';
 	}
 }
 
